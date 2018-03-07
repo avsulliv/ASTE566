@@ -5,14 +5,17 @@ import re
 from pandas import DataFrame as df
 from sys import argv
 import csv
+import pytz
 
 #CONSTANTS
 in_columns = ['Date','Time','Satellite','Azm','Elv','Mag','Range','S.Azm','S.Elv']
-out_columns = ['Satellite','StartDate','StartTime','EndDate','EndTime','Duration']
+out_columns = ['Satellite','AOS_UTC','LOS_UTC','AOS_Local','LOS_Local','Duration']
 outname = 'schedule-group4.csv'
 filename = argv[1]
 
 fpr = open(filename,'r')
+
+LOCAL=-7 #UTC offset - PST = -7, PDT=-8
 
 #first format the input file
 new = filename.split('.')[0]+"_formatted.csv"
@@ -62,21 +65,40 @@ for i in range(length):
 	DF2=DF[3*i:3*(i+1)].copy()
 	#Extract parameters
 	Satellite = DF2.ix[j+0]['Satellite']
-	AOS = DF2.ix[j+0]['Date']+'_'+DF2.ix[j+0]['Time']
-	LOS = DF2.ix[j+2]['Date']+'_'+DF2.ix[j+2]['Time']
-	#Populate target parameters
-	DF3.ix[i]['StartDate']=DF2.ix[j]['Date']
-	DF3.ix[i]['StartTime']=DF2.ix[j]['Time']
-	DF3.ix[i]['EndDate']=DF2.ix[j+2]['Date']
-	DF3.ix[i]['EndTime']=DF2.ix[j+2]['Time']
+	AOS = DF2.ix[j+0]['Date']+' '+DF2.ix[j+0]['Time']
+	LOS = DF2.ix[j+2]['Date']+' '+DF2.ix[j+2]['Time']
+
+	#Format Timezoning
+	AOS_dt = dt.datetime.strptime(AOS, '%Y-%m-%d %H:%M:%S')
+	LOS_dt = dt.datetime.strptime(LOS, '%Y-%m-%d %H:%M:%S')
+
+	UTC = pytz.timezone("UTC")
+	AOS_UTC = UTC.localize(AOS_dt) #Configure current AOS time to UTC zone
+	LOS_UTC = UTC.localize(LOS_dt) #Configure current LOS time to UTC zone
+	AOS_Local = AOS_UTC.astimezone(pytz.timezone("America/Los_Angeles"))  #Convert UTC to Los Angeles local time
+	LOS_Local = LOS_UTC.astimezone(pytz.timezone("America/Los_Angeles"))  #Convert UTC to Los Angeles local time
+
+	#Convert python datetime objects into datetime strings and populate in dataframe
+	DF3.ix[i]['AOS_UTC']=AOS_UTC.strftime("%Y-%m-%d %H:%M:%S")
+	DF3.ix[i]['LOS_UTC']=LOS_UTC.strftime("%Y-%m-%d %H:%M:%S")
+	DF3.ix[i]['AOS_Local']=AOS_Local.strftime("%Y-%m-%d %H:%M:%S")
+	DF3.ix[i]['LOS_Local']=LOS_Local.strftime("%Y-%m-%d %H:%M:%S")
+
+	#OLD
+	#Populate target UTC time parameters
+	#DF3.ix[i]['AOS_UTC']=DF2.ix[j+0]['Date']+' '+DF2.ix[j+0]['Time']
+	#DF3.ix[i]['LOS_UTC']=DF2.ix[j+2]['Date']+' '+DF2.ix[j+2]['Time']
+
+	#Populate Satellite ID
 	DF3.ix[i]['Satellite']=Satellite
+	
 	#Compute duration
 	#datetime_object = dt.strptime('Jun 1 2005  1:33PM', '%b %d %Y %I:%M%p')
 	#dt = datetime.strptime("21/11/06 16:30", "%d/%m/%y %H:%M")
 	#'2018-03-05_00:07:09''
-	AOS_dt = dt.datetime.strptime(AOS, '%Y-%m-%d_%H:%M:%S')
-	LOS_dt = dt.datetime.strptime(LOS, '%Y-%m-%d_%H:%M:%S')
 	delta=LOS_dt-AOS_dt
 	DF3.ix[i]['Duration']=delta.seconds
+
+	#Populate Local Time Parameters
 
 DF3.to_csv(outname,index=False)
