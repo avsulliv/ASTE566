@@ -9,7 +9,7 @@ import pytz
 
 #CONSTANTS
 in_columns = ['Date','Time','Satellite','Azm','Elv','Mag','Range','S.Azm','S.Elv']
-out_columns = ['Satellite','AOS_UTC','LOS_UTC','AOS_Local','LOS_Local','Duration']
+out_columns = ['Satellite','NORAD_ID','AOS_UTC','LOS_UTC','AOS_Local','LOS_Local','Duration']
 outname = 'schedule-group4.csv'
 filename = argv[1]
 
@@ -36,7 +36,12 @@ while(True):
      	#line=str(i)+','+re.sub("\s+", ",", line.strip())+'\n'
      	line=re.sub("\s+", ",", line.strip())+'\n'
      	print line
-     	formatted.writelines(line)
+     	y=line.split(',')
+        y.pop() #pop off /r/n
+        if not '' in y:
+           formatted.writelines(line)
+        else:
+           continue
      	i=i+1
      except: break
 
@@ -66,11 +71,12 @@ for i in range(length):
 	#Extract parameters
 	Satellite = DF2.ix[j+0]['Satellite']
 	AOS = DF2.ix[j+0]['Date']+' '+DF2.ix[j+0]['Time']
+	print AOS
 	LOS = DF2.ix[j+2]['Date']+' '+DF2.ix[j+2]['Time']
-
+	print LOS
 	#Format Timezoning
-	AOS_dt = dt.datetime.strptime(AOS, '%Y-%m-%d %H:%M:%S')
-	LOS_dt = dt.datetime.strptime(LOS, '%Y-%m-%d %H:%M:%S')
+	AOS_dt = dt.datetime.strptime(AOS, '%m/%d/%Y %H:%M:%S')
+	LOS_dt = dt.datetime.strptime(LOS, '%m/%d/%Y %H:%M:%S')
 
 	UTC = pytz.timezone("UTC")
 	AOS_UTC = UTC.localize(AOS_dt) #Configure current AOS time to UTC zone
