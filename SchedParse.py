@@ -74,10 +74,23 @@ for i in range(length):
 	print AOS
 	LOS = DF2.ix[j+2]['Date']+' '+DF2.ix[j+2]['Time']
 	print LOS
-	#Format Timezoning
-	AOS_dt = dt.datetime.strptime(AOS, '%m/%d/%Y %H:%M:%S')
-	LOS_dt = dt.datetime.strptime(LOS, '%m/%d/%Y %H:%M:%S')
 
+	#Format Timezoning
+	if ('/' in AOS) and ('/' in LOS):
+		datechar = '/'
+		AOS_dt = dt.datetime.strptime(AOS, '%m/%d/%Y %H:%M:%S')
+		LOS_dt = dt.datetime.strptime(LOS, '%m/%d/%Y %H:%M:%S')
+	elif ('-' in AOS) and ('-' in LOS):
+		datechar = '-'
+		try:
+			AOS_dt = dt.datetime.strptime(AOS, '%m-%d-%Y %H:%M:%S')
+			LOS_dt = dt.datetime.strptime(LOS, '%m-%d-%Y %H:%M:%S')
+		except:
+			AOS_dt = dt.datetime.strptime(AOS, '%Y-%m-%d %H:%M:%S')
+			LOS_dt = dt.datetime.strptime(LOS, '%Y-%m-%d %H:%M:%S')
+
+
+	
 	UTC = pytz.timezone("UTC")
 	AOS_UTC = UTC.localize(AOS_dt) #Configure current AOS time to UTC zone
 	LOS_UTC = UTC.localize(LOS_dt) #Configure current LOS time to UTC zone
