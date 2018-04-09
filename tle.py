@@ -4,7 +4,7 @@ class tle(object):
 	#'''Class tle: is a container.'''
 	def __init__(self):
 		#instantiate TLE dictionary container
-		self.__dict_init__()
+		self.__dict_init()
 	def import_tle(self, filename):
 		#import from TLE plaintext file
 		self.tle_dict = {}
@@ -31,35 +31,36 @@ class tle(object):
 	#def modify(self,):
 		#modifies one or more TLE parameters and yields a new tle object
 	def __line_one(self, parameters):
-
+		spaces1 = [' ',' ','   ','  ','  ','  ',' ','  ','']
 		return 0
 	def __line_two(self, parameters):
+		spaces2 = [' ','  ',' ',' ',' ',' ',' ','  ','']
 		return 0
-	def __dict_init__(self):
+	def __dict_init(self):
 		self.tle_dict = {}
 		self.tle_dict['name'] = str()
 		#Line One of TLE
 		self.tle_dict['1'] = {}
-		self.tle_dict['1']['satid'] = str()			#Satellite identifier = satellite number + classification 
-		self.tle_dict['1']['intldez'] = str()		#International designator 
-		self.tle_dict['1']['epoch'] = str()			#epoch
-		self.tle_dict['1']['dnd1'] = str()			#First derivative of mean motion
-		self.tle_dict['1']['dnd2'] = str()			#Second derivative of mean motion
-		self.tle_dict['1']['bstar'] = str()			#Normalized ballistic coeficient
-		self.tle_dict['1']['ephemeris'] = str()		#Ephemeris model: 1=SGP, 2=SGP4, 3=SDP4, 4=SGP8, 5=SDP8
-		self.tle_dict['1']['element'] = int()		#Element number: increment of TLE
-		#self.tle_dict['1']['checksum']
+		self.tle_dict['1']['satid'] = {value: str(), length: 0}			#Satellite identifier = satellite number + classification 
+		self.tle_dict['1']['intldez'] = {value: str(), length: 0}		#International designator 
+		self.tle_dict['1']['epoch'] = {value: str(), length: 0}			#epoch
+		self.tle_dict['1']['dnd1'] = {value: str(), length: 0}			#First derivative of mean motion
+		self.tle_dict['1']['dnd2'] = {value: str(), length: 0}			#Second derivative of mean motion
+		self.tle_dict['1']['bstar'] = {value: str(), length: 0}			#Normalized ballistic coeficient
+		self.tle_dict['1']['ephemeris'] = {value: str(), length: 0}		#Ephemeris model: 1=SGP, 2=SGP4, 3=SDP4, 4=SGP8, 5=SDP8
+		self.tle_dict['1']['element'] = {value: int(), length: 0}		#Element number: increment of TLE
+		self.tle_dict['1']['checksum'] = {value: int(), length: 0}		#Checksum for line 1 (mod 10?)
 		#Line Two of TLE
 		self.tle_dict['2'] = {}
-		self.tle_dict['2']['satnum'] = str()			#Satellite number
-		self.tle_dict['2']['i'] = float()			#Inclination [degrees]
-		self.tle_dict['2']['raan'] = float()		#Right Ascension of the Ascending node [degrees]
-		self.tle_dict['2']['e'] = float()	  		#eccentricity
-		self.tle_dict['2']['periapsis'] = float()	#argument of periapsis [degrees]
-		self.tle_dict['2']['M'] = float()			#Mean anomaly [degrees]
-		self.tle_dict['2']['n'] = float()			#Mean motion [revolutions/day]
-		self.tle_dict['2']['revs'] = int()			#number of revolutions at epoch
-		#self.tle_dict['2']['checksum'] = 
+		self.tle_dict['2']['satnum'] = {value: str(), length: 0}		#Satellite number
+		self.tle_dict['2']['i'] = {value: float(), length: 0}			#Inclination [degrees]
+		self.tle_dict['2']['raan'] = {value: float(), length: 0}		#Right Ascension of the Ascending node [degrees]
+		self.tle_dict['2']['e'] = {value: float(), length: 0}	  		#eccentricity
+		self.tle_dict['2']['periapsis'] = {value: float(), length: 0}	#argument of periapsis [degrees]
+		self.tle_dict['2']['M'] = {value: float(), length: 0}			#Mean anomaly [degrees]
+		self.tle_dict['2']['n'] = {value: float(), length: 0}			#Mean motion [revolutions/day]
+		self.tle_dict['2']['revs'] = {value: int(), length: 0}			#number of revolutions at epoch
+		self.tle_dict['2']['checksum'] = {value: int(), length: 0}		#Checksum for line 2 (mod 10?)
 		return 0
 
 
