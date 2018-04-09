@@ -6,6 +6,7 @@ g = open('Mystery_TLEs.txt','w')
 spaces1 = [' ',' ','   ','  ','  ','  ',' ','  ','']
 spaces2 = [' ','  ',' ',' ',' ',' ',' ','  ','']
 
+satnum = 1 #init
 while(True):
 	try:
 		line = f.next()
@@ -13,6 +14,9 @@ while(True):
 		if params[0] == str(1):
 			x=params[4]
 			params[4]='.'+x.split('.')[1]
+			#satid = params[1]
+			#satnum = satid.partition('U')[0]
+			params[1]=str(satnum).zfill(05)+'U' #overwrite sat-id with incrementing satid
 			concat = zip(params,spaces1)
 			formatted = list(sum(concat,()))
 			flat = ''.join(formatted)
@@ -22,12 +26,14 @@ while(True):
 		elif params[0] == str(2):
 			params[1]=params[1].zfill(05)
 			params[4]=params[4].zfill(07)
+			params[1] = str(satnum).zfill(05)
 			concat = zip(params,spaces2)
 			formatted = list(sum(concat,()))
 			flat = ''.join(formatted)
 			g.write(flat)
 			newfile.write(flat)
 			newfile.close()
+			satnum=satnum+1 #increment satnum
 			continue
 		else:
 			#Then must be name (line zero)
