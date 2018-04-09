@@ -7,13 +7,21 @@ class tle(object):
 		self.__dict_init()
 	def import_tle(self, filename):
 		#import from TLE plaintext file
-		self.tle_dict = {}
-		self.tle_dict['name'] = ''
-		self.tle_dict['1'] = {}
-		self.tle_dict['2'] = {}
 		fp = open(filename,'r')
 		while True:
 			line = fp.next()
+			parameters=line.split(' ')
+			while('' in parameters): parameters.remove('')
+			if parameters[0] == '1':
+				#do line one
+				self.__line_one(parameters)
+			elif parameters[0] == '2':
+				#do line two
+				self.__line_two(parameters)
+			else: 
+				try: self.tle_dict['name'] = line.strip('\r\n')
+				try: self.tle_dict['name'] = self.tle_dict['name'].strip('\n')
+
 			if ' ' not in line :
 				#then is sat name
 				satname = line.strip('\n')
