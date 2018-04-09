@@ -9,8 +9,8 @@ import pytz
 
 #CONSTANTS
 in_columns = ['Date','Time','Satellite','Azm','Elv','Mag','Range','S.Azm','S.Elv']
-out_columns = ['Satellite','NORAD_ID','AOS_UTC','LOS_UTC','AOS_Local','LOS_Local','Duration']
-outname = 'schedule-group4.csv'
+out_columns = ['Satellite','NORAD_ID','AOS_UTC','LOS_UTC','AOS_Local','LOS_Local','Duration','AOS_AZ','AOS_EL','AOS_RNG','APEX_AZ','APEX_EL','APEX_RNG','LOS_AZ','LOS_EL','LOS_RNG']
+outname = 'satpass_schedule.csv'
 filename = argv[1]
 
 fpr = open(filename,'r')
