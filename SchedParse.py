@@ -108,6 +108,21 @@ for i in range(length):
 	#DF3.ix[i]['AOS_UTC']=DF2.ix[j+0]['Date']+' '+DF2.ix[j+0]['Time']
 	#DF3.ix[i]['LOS_UTC']=DF2.ix[j+2]['Date']+' '+DF2.ix[j+2]['Time']
 
+	#Populate AOS EL/AZ/RNG
+	DF3.ix[i]['AOS_AZ']=DF2.ix[j+0]['Azm']
+	DF3.ix[i]['AOS_EL']=DF2.ix[j+0]['Elv']
+	DF3.ix[i]['AOS_RNG']=DF2.ix[j+0]['Range']
+
+	#Populate MAX EL/AZ/RNG
+	DF3.ix[i]['APEX_AZ']=DF2.ix[j+1]['Azm']
+	DF3.ix[i]['APEX_EL']=DF2.ix[j+1]['Elv']
+	DF3.ix[i]['APEX_RNG']=DF2.ix[j+1]['Range']
+
+	#Populate AOS EL/AZ/RNG
+	DF3.ix[i]['LOS_AZ']=DF2.ix[j+2]['Azm']
+	DF3.ix[i]['LOS_EL']=DF2.ix[j+2]['Elv']
+	DF3.ix[i]['LOS_RNG']=DF2.ix[j+2]['Range']
+
 	#Populate Satellite ID
 	DF3.ix[i]['Satellite']=Satellite
 	
